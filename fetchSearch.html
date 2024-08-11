@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search and Filter</title>
+    <style>
+        
+        .container {
+            display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    /* justify-content: center; */
+    align-items: center;
+    margin: auto;
+        }
+        input{
+            margin: auto;        
+        display: flex;}
+        img {
+            height: 200px;
+            width: 200px;
+        }
+        .product {
+            margin-bottom: 20px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    border-radius: 19px;
+    padding: 2rem;
+    height: 340px;
+        }
+    </style>
+</head>
+<body>
+    <div class="complete">
+        <input type="text" onkeyup="search()" placeholder="Search for products...">
+        <div class="container">
+        </div>
+    </div>
+
+    <script>
+        const url = "https://fakestoreapi.com/products";
+        const container = document.querySelector('.container');
+       
+
+        const fetchingData = async () => {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data;
+        }
+
+        const Display = async () => {
+            const user = await fetchingData();
+            user.forEach(element => {
+                const productList = document.createElement('div');
+                const image = document.createElement('img');
+                productList.classList.add("product");
+                const h2 = document.createElement('h2');
+                image.src = element.image;
+                h2.textContent = element.title;
+
+                productList.appendChild(image);
+                productList.appendChild(h2);
+                container.appendChild(productList);
+            });
+
+        }
+        Display();
+
+        const search = () => {
+            const searchInput = document.querySelector('input').value.toUpperCase();
+            const productList = document.querySelectorAll('.product');
+            productList.forEach(element => {
+                let p = element.querySelector('h2').textContent.toUpperCase();
+                element.style.display = p.includes(searchInput) ? "" : "none";
+            });
+        }
+
+       
+    </script>
+</body>
+</html>
